@@ -66,26 +66,15 @@ def build(dockerRegistry, repoName, version){
 
 }
 
+
 def createRepository(repoName){
-    if(repositoryExists(repoName)){
-        RESULT = sh (
-                script: "aws ecr create-repository --repository-name $repoName",
-                returnStdout: true,
-                returnStatus: true
-        ).trim()
-        print RESULT
-    }
+
+  sh """
+    aws ecr describe-repositories --repository-names ${repoName} || aws ecr create-repository --repository-name ${repoName}
+  """
 
 }
 
-def describeRepository(repoName){
-    RESULT = sh (
-            script: "aws ecr describe-repositories --repository-names $repoName | jq '.repositories[].repositoryArn' | wc -l",
-            returnStdout: true,
-            returnStatus: false
-    ).trim()
-    print RESULT
-}
 
 def repositoryExists(repoName){
     if (describeRepository(repoName) == 0) {
