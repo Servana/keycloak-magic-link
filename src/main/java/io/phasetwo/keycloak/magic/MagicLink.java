@@ -88,7 +88,7 @@ public class MagicLink {
   public static MagicLinkActionToken createActionToken(
       UserModel user, String clientId, String redirectUri, OptionalInt validity) {
     // build the action token
-    int validityInSecs = validity.orElse(60 * 60 * 24); // 1 day
+    int validityInSecs = validity.orElse(60 * 15); // 15 minutes
     int absoluteExpirationInSecs = Time.currentTime() + validityInSecs;
     MagicLinkActionToken token =
         new MagicLinkActionToken(user.getId(), absoluteExpirationInSecs, clientId, redirectUri);
